@@ -10,7 +10,7 @@ export type DestinationQueue = v.InferOutput<typeof DestinationQueue>;
 export const DestinationUrl = v.object({
   type: v.literal("url"),
   url: v.pipe(v.string(), v.url()),
-  method: v.optional(v.string(), "GET"),
+  method: v.optional(v.string(), "POST"),
   service: v.optional(v.string()),
 });
 export type DestinationUrl = v.InferOutput<typeof DestinationUrl>;

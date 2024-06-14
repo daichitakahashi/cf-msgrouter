@@ -7,7 +7,7 @@ const assertNever = (_: never) => {};
 export const dispatch = async (
   dest: Destination,
   env: Record<string, unknown>,
-  message: Record<string, unknown>,
+  message: unknown,
 ) => {
   switch (dest.type) {
     case "queue": {
@@ -32,7 +32,13 @@ export const dispatch = async (
         return fetch;
       })();
 
-      const resp = await fetchFn(dest.url, { method: dest.method });
+      const resp = await fetchFn(dest.url, {
+        method: dest.method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(message),
+      });
       if (!resp.ok) {
         throw new Error(`cf-msgrouter: received status code = ${resp.status}`);
       }

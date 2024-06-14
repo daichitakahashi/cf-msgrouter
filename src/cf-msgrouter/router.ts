@@ -2,7 +2,7 @@ import * as jsonpath from "jsonpath";
 
 import type { Condition, Config, Destination } from "./schema";
 
-const matchCond = (message: Record<string, unknown>) => (cond: Condition) => {
+const matchCond = (message: unknown) => (cond: Condition) => {
   const values = jsonpath.query(message, cond.path);
   if (values.length === 0) {
     return false;
@@ -22,9 +22,6 @@ const matchCond = (message: Record<string, unknown>) => (cond: Condition) => {
   return values.every((v) => matchers.every((match) => match(v)));
 };
 
-export const findRoute = (
-  c: Config,
-  message: Record<string, unknown>,
-): Destination | null =>
+export const findRoute = (c: Config, message: unknown): Destination | null =>
   c.targets.find((target) => target.conditions.every(matchCond(message)))
     ?.destination || null;
