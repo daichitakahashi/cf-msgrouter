@@ -7,6 +7,7 @@ import { findRoute } from "./router";
 
 interface RunOption {
   routeConfig?: string;
+  errorOnUnknownMessage: boolean;
 }
 
 export const run = async (
@@ -29,7 +30,10 @@ export const run = async (
   //
   const dest = findRoute(config, message);
   if (!dest) {
-    throw new Error("cf-msgrouter: destination not found");
+    if (option?.errorOnUnknownMessage) {
+      throw new Error("cf-msgrouter: destination not found");
+    }
+    return; // discard
   }
 
   await dispatch(dest, env, message);
