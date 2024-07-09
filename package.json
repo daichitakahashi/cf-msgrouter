@@ -1,6 +1,6 @@
 {
   "name": "cf-msgrouter",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": false,
   "scripts": {
     "build": "tsup src/index.ts"
@@ -19,18 +19,17 @@
     "zod": "^3.23.8"
   },
   "tsup": {
-    "entry": [
-      "src/index.ts"
-    ],
+    "entry": ["src/index.ts"],
     "splitting": true,
     "sourcemap": true,
-    "format": [
-      "esm",
-      "cjs"
-    ],
+    "format": ["esm", "cjs"],
     "dts": true
   },
-  "files": [
-    "dist"
-  ]
+  "files": ["dist"],
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  }
 }
