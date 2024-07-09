@@ -1,42 +1,40 @@
-import * as v from "valibot";
+import { z } from "zod";
 
-const DestinationQueue = v.object({
-  type: v.literal("queue"),
-  queue: v.pipe(v.string(), v.minLength(1)),
-  delaySeconds: v.optional(v.number()),
+const DestinationQueue = z.object({
+  type: z.literal("queue"),
+  queue: z.string().min(1),
+  delaySeconds: z.number().optional(),
 });
-export type DestinationQueue = v.InferOutput<typeof DestinationQueue>;
+export type DestinationQueue = z.infer<typeof DestinationQueue>;
 
-export const DestinationUrl = v.object({
-  type: v.literal("url"),
-  url: v.pipe(v.string(), v.url()),
-  method: v.optional(v.string(), "POST"),
-  service: v.optional(v.string()),
+export const DestinationUrl = z.object({
+  type: z.literal("url"),
+  url: z.string().url(),
+  method: z.string().optional().default("POST"),
+  service: z.string().optional(),
 });
-export type DestinationUrl = v.InferOutput<typeof DestinationUrl>;
+export type DestinationUrl = z.infer<typeof DestinationUrl>;
 
-export const Destination = v.union([DestinationQueue, DestinationUrl]);
-export type Destination = v.InferOutput<typeof Destination>;
+export const Destination = z.union([DestinationQueue, DestinationUrl]);
+export type Destination = z.infer<typeof Destination>;
 
-const Condition = v.object({
-  path: v.pipe(v.string(), v.minLength(1)),
-  exact: v.optional(v.unknown()),
-  match: v.optional(
-    v.pipe(
-      v.string(),
-      v.transform((s) => new RegExp(s)),
-    ),
-  ),
+const Condition = z.object({
+  path: z.string().min(1),
+  exact: z.unknown().optional(),
+  match: z
+    .string()
+    .optional()
+    .transform((s) => (s ? new RegExp(s) : undefined)),
 });
-export type Condition = v.InferOutput<typeof Condition>;
+export type Condition = z.infer<typeof Condition>;
 
-const Target = v.object({
-  conditions: v.array(Condition),
+const Target = z.object({
+  conditions: z.array(Condition),
   destination: Destination,
 });
-export type Target = v.InferOutput<typeof Target>;
+export type Target = z.infer<typeof Target>;
 
-export const Config = v.object({
-  targets: v.array(Target),
+export const Config = z.object({
+  targets: z.array(Target),
 });
-export type Config = v.InferOutput<typeof Config>;
+export type Config = z.infer<typeof Config>;

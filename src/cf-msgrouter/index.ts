@@ -1,5 +1,4 @@
-import type { MessageBatch } from "@cloudflare/workers-types/2023-07-01";
-import * as v from "valibot";
+import type { MessageBatch } from "@cloudflare/workers-types";
 
 import { Config } from "./schema";
 import { dispatch } from "./dispatch";
@@ -25,7 +24,7 @@ export const run = async (
       `cf-msgrouter: configuration(${routeConfig}) is not json formatted string`,
     );
   }
-  const config = await v.parseAsync(Config, JSON.parse(configString));
+  const config = await Config.parseAsync(JSON.parse(configString));
 
   //
   const dest = findRoute(config, message);

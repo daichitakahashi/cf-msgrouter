@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
-import type { Config } from "./schema";
 import { findRoute } from "./router";
+import type { Config } from "./schema";
 
 test("empty conditions", () => {
   const config: Config = {

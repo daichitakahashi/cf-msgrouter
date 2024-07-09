@@ -1,4 +1,4 @@
-import type { Fetcher, Queue } from "@cloudflare/workers-types/2023-07-01";
+import type { Fetcher, Queue } from "@cloudflare/workers-types";
 
 import type { Destination } from "./schema";
 
